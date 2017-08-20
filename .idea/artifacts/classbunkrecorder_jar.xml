@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="classbunkrecorder:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/classbunkrecorder_jar</output-path>
+    <root id="archive" name="classbunkrecorder.jar">
+      <element id="module-output" name="classbunkrecorder" />
+      <element id="extracted-dir" path="D:/acads/Java/bluecove-2.1.1-SNAPSHOT.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

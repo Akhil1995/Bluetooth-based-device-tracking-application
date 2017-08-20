@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: C:\Users\Akhil\IdeaProjects\classbunkrecorder\src\main\jav
+ a\bluetoothdevicediscovery\Run.java
+Main-Class: bluetoothdevicediscovery.Run
+

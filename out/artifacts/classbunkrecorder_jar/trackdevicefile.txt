@@ -1,8 +1,0 @@
-DeviceDelimiter
-9C6C155B982D
-Nokia220
-deviceFiles/9C6C155B982D.txt
-DeviceDelimiter
-64B310CB4240
-Akhil sai
-deviceFiles/64B310CB4240.txt

@@ -1,4 +1,4 @@
-package bluetoothdevicediscovery;
+package bas.devicediscovery.bluetooth;
 
 /**
  * Created by Akhil on 30-06-2017.

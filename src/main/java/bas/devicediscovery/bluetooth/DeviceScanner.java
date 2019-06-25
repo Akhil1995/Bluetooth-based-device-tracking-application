@@ -1,42 +1,16 @@
-package bluetoothdevicediscovery;
-/**
- * Created by Akhil on 12-08-2016.
- */
+package bas.devicediscovery.bluetooth;
+
 import javax.bluetooth.*;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
-/**
- * This class is for creating a thread, running the ScanDevices code.
- */
-class ScanDevicesThread extends Thread{
-    private BlockingQueue<HashMap<String,String>> q;
-    ScanDevicesThread(BlockingQueue<HashMap<String,String>> queue){
-        this.q= queue;
-    }
-    public void run(){
-        System.out.println("Connecting to bluetooth hardware");
-        ScanDevices newConnection = new ScanDevices();
-        newConnection.setQueueForListOfDevices(q);
-        try {
-            newConnection.startDeviceInquiry();
-            System.out.println("Bluetooth module started");
-        } catch (BluetoothStateException e) {
-            e.printStackTrace();
-        }
-    }
-}
-public class ScanDevices {
+public class DeviceScanner {
     private static LocalDevice hostDevice;
     private static DiscoveryAgent discAgent;
     private BlockingQueue queueForListOfDevices;
 
-    void setQueueForListOfDevices(BlockingQueue queueForListOfDevices) {
+    public void setQueueForListOfDevices(BlockingQueue queueForListOfDevices) {
         this.queueForListOfDevices = queueForListOfDevices;
     }
 
@@ -64,7 +38,7 @@ public class ScanDevices {
      *
      * @throws InterruptedException
      */
-    void startDeviceInquiry() throws BluetoothStateException {
+    public void startDeviceInquiry() throws BluetoothStateException {
         if (hostDevice == null) {
             //TODO:Start device initiation.
             bluetoothInit();

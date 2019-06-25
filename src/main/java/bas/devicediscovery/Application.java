@@ -1,12 +1,10 @@
-package bluetoothdevicediscovery;
+package bas.devicediscovery;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import bas.devicediscovery.bluetooth.Device;
+import bas.devicediscovery.storage.FileIO;
+import bas.devicediscovery.ui.JFrameUIScr1;
+import bas.devicediscovery.ui.JFrameUIScr2;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,78 +15,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Akhil on 30-06-2017.
  */
-class DataWriting{
-    void writeDataToFiles(LinkedList<Device> listOfDevices){
-        int tracker=0;
-        if(!listOfDevices.isEmpty()){
-            for(tracker=0;tracker<listOfDevices.size();tracker++){
-                if(listOfDevices.get(tracker).getTrack().equals(1)){
-                    // Write the epoch time and the status to the corresponding file
-                    try {
-                        FileWriter fw = new FileWriter(listOfDevices.get(tracker).getFileLoc(),true);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write("\n");
-                        bw.write(Long.toString(listOfDevices.get(tracker).getEpochTime()));
-                        bw.write("\n");
-                        if(listOfDevices.get(tracker).getStatus().equals(1)){
-                            bw.write("A");
-                        }
-                        else if(listOfDevices.get(tracker).getStatus().equals(0)){
-                            bw.write("U");
-                        }
-                        bw.close();
-                        fw.close();
-                    } catch (IOException e){
-                        e.printStackTrace();
-                        // If the location is not found, create source directory and retry.
-                    }
-                }
-            }
-        }
-    }
-}
-class StartApplicationUI implements Runnable{
-    private AtomicBoolean startStopApp;
-    StartApplicationUI(AtomicBoolean a){
-        this.startStopApp = a;
-    }
-    public void run(){
-        final JFrame fra = new JFrame();
-        fra.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.ipady = 40;
-        c.gridwidth = 8;
-        JLabel lbl = new JLabel("Welcome to Bluetooth based Device tracking application");
-        fra.add(lbl,c);
-        //JPanel grid = new JPanel(new FlowLayout());
-        JButton startButton = new JButton("Start Application");
-        //JButton stopButton  = new JButton("Stop Application");
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //startStopApp=true;
-                startStopApp.set(true);
-                fra.dispose();
-            }
-        });
-        GridBagConstraints c1 = new GridBagConstraints();
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridx = 2;
-        c1.gridy = 1;
-        c1.gridwidth =1;
-        //c1.weightx = 0.5;
-        fra.add(startButton,c1);
-        fra.setTitle("Welcome");
-        fra.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fra.pack();
-        fra.setLocationRelativeTo(null);
-        fra.setVisible(true);
-    }
-}
 // Driver class
-public class Run{
+public class Application {
+    private static FileIO fileWriter = new FileIO();
     public static void main(String args[]){
         System.out.println("Booting Application...");
         BlockingQueue<HashMap<String,String>> queueOfAvailableDevices =
@@ -100,7 +29,7 @@ public class Run{
          * Starting the tracking thread. The tracking thread sends list of available devices
          * every 10 seconds or so. The application and the threads all start in the next few lines
          */
-        ScanDevicesThread t1 = new ScanDevicesThread(queueOfAvailableDevices);
+        ScanDevices t1 = new ScanDevices(queueOfAvailableDevices);
         LinkedList<Device> listOfDevicesTracked = new LinkedList<Device>();
         HashMap<String,String> tempVar = new HashMap<String, String>();
         AtomicBoolean startStopApp = new AtomicBoolean(false);
@@ -146,10 +75,10 @@ public class Run{
         if(!listOfDevicesTracked.isEmpty()){
              duplicateList = (LinkedList<Device>)listOfDevicesTracked.clone();
         }
-        UserInterface ui = new UserInterface(duplicateList,listOfDevicesTracked,deviceListLocation,isRefReady);
+        JFrameUIScr2 ui = new JFrameUIScr2(duplicateList,listOfDevicesTracked,deviceListLocation,isRefReady);
         // Put an Interrupt here. A button click mostly to start tracking.
         System.out.println("Getting up the User Interface");
-        StartApplicationUI startingDisplayBox = new StartApplicationUI(startStopApp);
+        JFrameUIScr1 startingDisplayBox = new JFrameUIScr1(startStopApp);
         Thread t2 = new Thread(startingDisplayBox);
         t2.start();
         while(true){
@@ -238,7 +167,7 @@ public class Run{
                         // the old user interface will be disposed and fresh User Interface will be displayed.
                         if(timeDifference>60000){
                             uiRenderTime = System.currentTimeMillis();
-                            new DataWriting().writeDataToFiles(duplicateList);
+                            fileWriter.writeDataToFiles(duplicateList);
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();

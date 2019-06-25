@@ -1,4 +1,6 @@
-package bluetoothdevicediscovery;
+package bas.devicediscovery;
+
+import bas.devicediscovery.bluetooth.Device;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,9 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Akhil on 28-09-2016.

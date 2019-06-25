@@ -1,7 +1,8 @@
-package bluetoothdevicediscovery;
+package bas.devicediscovery.ui;
+
+import bas.devicediscovery.bluetooth.Device;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Akhil on 13-07-2017.
  */
-public class UserInterface extends Thread{
+public class JFrameUIScr2 extends Thread{
     private LinkedList<Device> listOfDevices;
     private LinkedList<Device> listOfDevicesTracked;
     private String deviceListLocation;
     private AtomicBoolean isRefReady = new AtomicBoolean(false);
-    UserInterface(LinkedList<Device> ls, LinkedList<Device> ls1, String loc, AtomicBoolean iar){
+    public JFrameUIScr2(LinkedList<Device> ls, LinkedList<Device> ls1, String loc, AtomicBoolean iar){
         listOfDevices = ls;
         listOfDevicesTracked= ls1;
         deviceListLocation = loc;
